@@ -93,7 +93,7 @@ const config = {
             items: [
               {
                 label: 'Quickstart',
-                to: '/documentation/docs/Standard%20Install/Quickstart',
+                to: '/docs/Standard%20Install/Quickstart',
               },
             ],
           },
