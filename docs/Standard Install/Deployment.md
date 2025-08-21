@@ -30,7 +30,7 @@ APP_NAME="Your Production App"
 APP_SECRET=your-very-secure-secret-key-here
 
 # Database
-DATABASE_URL="mysql://user:secure_password@localhost:3306/production_db"
+DATABASE_URI="mysql://user:secure_password@localhost:3306/production_db"
 
 # Cache (Redis recommended for production)
 CACHE_DRIVER=redis

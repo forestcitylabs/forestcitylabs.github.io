@@ -18,13 +18,13 @@ Configure your database connection:
 
 ```env
 # Database
-DATABASE_URL="mysql://user:password@localhost:3306/database_name"
+DATABASE_URI="mysql://user:password@localhost:3306/database_name"
 
 # Or for PostgreSQL
-DATABASE_URL="postgresql://user:password@localhost:5432/database_name"
+DATABASE_URI="postgresql://user:password@localhost:5432/database_name"
 
 # Or for SQLite
-DATABASE_URL="sqlite:///path/to/database.db"
+DATABASE_URI="sqlite:///path/to/database.db"
 ```
 
 ### Application Settings
@@ -70,7 +70,7 @@ return [
     // Database connection
     'doctrine.connection' => DI\factory(function (ContainerInterface $c) {
         return \Doctrine\DBAL\DriverManager::getConnection([
-            'url' => $_ENV['DATABASE_URL']
+            'url' => $_ENV['DATABASE_URI']
         ]);
     }),
     
@@ -326,7 +326,7 @@ services:
       - "8080:80"
     environment:
       - APP_ENV=development
-      - DATABASE_URL=mysql://root:password@db:3306/app
+      - DATABASE_URI=mysql://root:password@db:3306/app
     volumes:
       - .:/var/www/html
     depends_on:
