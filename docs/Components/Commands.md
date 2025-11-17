@@ -11,8 +11,6 @@ The framework includes the following built-in commands:
 - `cache:table:create` - Create database table for cache storage
 
 ### Session Commands  
-- `session:clear` - Clear session data
-- `session:table:create` - Create database table for session storage
 
 ### GraphQL Commands
 - `graphql:dump-schema` - Export GraphQL schema to file
@@ -33,11 +31,8 @@ The framework includes the following built-in commands:
 Commands are run using the framework's console application:
 
 ```bash
-# Using the framework binary
-./vendor/bin/fcl <command>
-
-# Or if you have a custom console script
-php bin/console <command>
+# Using the console binary
+./vendor/bin/console <command>
 ```
 
 ### Getting Help
@@ -45,8 +40,8 @@ php bin/console <command>
 Get help for any command:
 
 ```bash
-./vendor/bin/fcl help cache:clear
-./vendor/bin/fcl cache:clear --help
+./vendor/bin/console help cache:clear
+./vendor/bin/console cache:clear --help
 ```
 
 ## Command Details
@@ -59,10 +54,10 @@ Remove all cached data:
 
 ```bash
 # Clear all cache
-./vendor/bin/fcl cache:clear
+./vendor/bin/console cache:clear
 
 # Clear specific cache pool (if supported)  
-./vendor/bin/fcl cache:clear --pool=routing
+./vendor/bin/console cache:clear --pool=routing
 ```
 
 The command clears:
@@ -75,45 +70,18 @@ The command clears:
 Create the database table for DBAL cache storage:
 
 ```bash
-./vendor/bin/fcl cache:table:create
+./vendor/bin/console cache:table:create
 
 # Specify custom table name
-./vendor/bin/fcl cache:table:create --table-name=app_cache
+./vendor/bin/console cache:table:create --table-name=app_cache
 
 # Preview SQL without executing
-./vendor/bin/fcl cache:table:create --dry-run
+./vendor/bin/console cache:table:create --dry-run
 ```
 
 ### Session Management
 
-#### Clear Sessions
 
-Remove session data:
-
-```bash
-# Clear all sessions
-./vendor/bin/fcl session:clear
-
-# Clear sessions older than specified time
-./vendor/bin/fcl session:clear --older-than=1h
-
-# Clear specific session
-./vendor/bin/fcl session:clear --session-id=abc123
-```
-
-#### Create Session Table
-
-Create the database table for session storage:
-
-```bash
-./vendor/bin/fcl session:table:create
-
-# Custom table name
-./vendor/bin/fcl session:table:create --table-name=user_sessions
-
-# Preview SQL
-./vendor/bin/fcl session:table:create --dry-run
-```
 
 ### GraphQL Commands
 
@@ -123,16 +91,16 @@ Export your GraphQL schema to a file:
 
 ```bash
 # Dump to stdout
-./vendor/bin/fcl graphql:dump-schema
+./vendor/bin/console graphql:dump-schema
 
 # Save to file
-./vendor/bin/fcl graphql:dump-schema > schema.graphql
+./vendor/bin/console graphql:dump-schema > schema.graphql
 
 # Specify output file
-./vendor/bin/fcl graphql:dump-schema --output=schema.graphql
+./vendor/bin/console graphql:dump-schema --output=schema.graphql
 
 # Format output (SDL, JSON)
-./vendor/bin/fcl graphql:dump-schema --format=json
+./vendor/bin/console graphql:dump-schema --format=json
 ```
 
 #### Generate from Schema
@@ -141,13 +109,13 @@ Generate PHP classes from a GraphQL schema file:
 
 ```bash
 # Generate types in specified directory
-./vendor/bin/fcl graphql:generate-from-schema schema.graphql src/GraphQL
+./vendor/bin/console graphql:generate-from-schema schema.graphql src/GraphQL
 
 # Specify namespace
-./vendor/bin/fcl graphql:generate-from-schema schema.graphql src/GraphQL --namespace="App\\GraphQL"
+./vendor/bin/console graphql:generate-from-schema schema.graphql src/GraphQL --namespace="App\\GraphQL"
 
 # Overwrite existing files
-./vendor/bin/fcl graphql:generate-from-schema schema.graphql src/GraphQL --force
+./vendor/bin/console graphql:generate-from-schema schema.graphql src/GraphQL --force
 ```
 
 Generated files include:
@@ -163,13 +131,13 @@ Validate your GraphQL schema for errors:
 
 ```bash
 # Validate current schema
-./vendor/bin/fcl graphql:validate-schema
+./vendor/bin/console graphql:validate-schema
 
 # Validate specific schema file
-./vendor/bin/fcl graphql:validate-schema --schema=schema.graphql
+./vendor/bin/console graphql:validate-schema --schema=schema.graphql
 
 # Verbose output
-./vendor/bin/fcl graphql:validate-schema --verbose
+./vendor/bin/console graphql:validate-schema --verbose
 ```
 
 Common validation errors:
@@ -184,16 +152,16 @@ Compare two schemas to identify differences:
 
 ```bash
 # Compare current schema with file
-./vendor/bin/fcl graphql:schema-diff schema-old.graphql
+./vendor/bin/console graphql:schema-diff schema-old.graphql
 
 # Compare two files  
-./vendor/bin/fcl graphql:schema-diff schema-old.graphql schema-new.graphql
+./vendor/bin/console graphql:schema-diff schema-old.graphql schema-new.graphql
 
 # Output format (text, json)
-./vendor/bin/fcl graphql:schema-diff old.graphql new.graphql --format=json
+./vendor/bin/console graphql:schema-diff old.graphql new.graphql --format=json
 
 # Only show breaking changes
-./vendor/bin/fcl graphql:schema-diff old.graphql new.graphql --breaking-only
+./vendor/bin/console graphql:schema-diff old.graphql new.graphql --breaking-only
 ```
 
 ### Entity Generation
@@ -202,19 +170,19 @@ Generate Doctrine entity classes:
 
 ```bash
 # Generate basic entity
-./vendor/bin/fcl generate:entity User
+./vendor/bin/console generate:entity User
 
 # Specify properties
-./vendor/bin/fcl generate:entity User --properties=name:string,email:string
+./vendor/bin/console generate:entity User --properties=name:string,email:string
 
 # Include relationships
-./vendor/bin/fcl generate:entity Post --properties=title:string --relations=author:User
+./vendor/bin/console generate:entity Post --properties=title:string --relations=author:User
 
 # Generate in specific namespace
-./vendor/bin/fcl generate:entity User --namespace="App\\Entity"
+./vendor/bin/console generate:entity User --namespace="App\\Entity"
 
 # Specify output directory
-./vendor/bin/fcl generate:entity User --output-dir=src/Entity
+./vendor/bin/console generate:entity User --output-dir=src/Entity
 ```
 
 Generated entities include:
@@ -230,16 +198,16 @@ Load test fixtures into your database:
 
 ```bash
 # Load all fixtures
-./vendor/bin/fcl fixtures:load
+./vendor/bin/console fixtures:load
 
 # Load specific fixtures
-./vendor/bin/fcl fixtures:load --fixtures=UserFixtures,PostFixtures
+./vendor/bin/console fixtures:load --fixtures=UserFixtures,PostFixtures
 
 # Skip confirmation prompt
-./vendor/bin/fcl fixtures:load --no-interaction
+./vendor/bin/console fixtures:load --no-interaction
 
 # Purge database before loading
-./vendor/bin/fcl fixtures:load --purge-with-truncate
+./vendor/bin/console fixtures:load --purge-with-truncate
 ```
 
 ## Creating Custom Commands
@@ -502,11 +470,11 @@ For production environments, schedule commands using cron:
 
 ```bash
 # Run cache clear daily at 2 AM
-0 2 * * * cd /path/to/app && ./vendor/bin/fcl cache:clear
+0 2 * * * cd /path/to/app && ./vendor/bin/console cache:clear
 
 # Run session cleanup hourly  
-0 * * * * cd /path/to/app && ./vendor/bin/fcl session:clear --older-than=24h
+# 0 * * * * cd /path/to/app && ./vendor/bin/console session:clear --older-than=24h  # Not needed with default PHP sessions
 
 # Validate schema before deployments
-0 0 * * * cd /path/to/app && ./vendor/bin/fcl graphql:validate-schema
+0 0 * * * cd /path/to/app && ./vendor/bin/console graphql:validate-schema
 ```

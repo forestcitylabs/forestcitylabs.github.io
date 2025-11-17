@@ -23,41 +23,17 @@ Before deploying to production, ensure:
 Create a production `.env` file:
 
 ```env
-# Application
-APP_ENV=production
-APP_DEBUG=false
-APP_NAME="Your Production App"
-APP_SECRET=your-very-secure-secret-key-here
+# Environment
+ENVIRONMENT=production
 
 # Database
 DATABASE_URI="mysql://user:secure_password@localhost:3306/production_db"
 
-# Cache (Redis recommended for production)
-CACHE_DRIVER=redis
-REDIS_URL=tcp://redis-server:6379
-
-# Sessions
-SESSION_DRIVER=redis
-SESSION_SECURE=true
-SESSION_HTTPONLY=true
-SESSION_SAMESITE=strict
-
-# Security
-JWT_SECRET=your-very-secure-jwt-secret-here
-OAUTH_ENCRYPTION_KEY=base64:your-encryption-key-here
-
-# CORS (restrict to your domains)
-CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://app.yourdomain.com
-
-# GraphQL
-GRAPHQL_INTROSPECTION=false
-GRAPHQL_SCHEMA_CACHE=true
-GRAPHQL_QUERY_COMPLEXITY_LIMIT=100
-
-# Logging
-LOG_LEVEL=warning
-LOG_CHANNEL=production
+# Trusted host (your production domain)
+TRUSTED_HOST=yourdomain.com
 ```
+
+Additional production configurations for caching, sessions, security, CORS, GraphQL, and logging should be handled through service container configuration and PHP settings rather than environment variables.
 
 ### Security Configuration
 
@@ -159,7 +135,8 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
-      - APP_ENV=production
+      - ENVIRONMENT=production
+      - TRUSTED_HOST=yourdomain.com
     volumes:
       - ./var/log:/var/www/html/var/log
       - ./var/keys:/var/www/html/var/keys:ro
@@ -364,19 +341,19 @@ composer install --no-dev --optimize-autoloader
 
 # Clear and warm caches
 echo "Clearing caches..."
-./vendor/bin/fcl cache:clear
+./vendor/bin/console cache:clear
 
 # Run database migrations
 echo "Running migrations..."
-./vendor/bin/doctrine-migrations migrate --no-interaction
+./vendor/bin/console doctrine:migrations:migrate --no-interaction
 
 # Generate Doctrine proxies
 echo "Generating Doctrine proxies..."
-./vendor/bin/doctrine orm:generate-proxies
+./vendor/bin/console doctrine:generate-proxies
 
 # Validate GraphQL schema
 echo "Validating GraphQL schema..."
-./vendor/bin/fcl graphql:validate-schema
+./vendor/bin/console graphql:validate-schema
 
 # Set permissions
 echo "Setting permissions..."
@@ -441,11 +418,11 @@ composer install --no-dev --optimize-autoloader
 
 # Run migrations (on shared database)
 echo "Running migrations..."
-./vendor/bin/doctrine-migrations migrate --no-interaction
+./vendor/bin/console doctrine:migrations:migrate --no-interaction
 
 # Validate application
 echo "Validating application..."
-./vendor/bin/fcl graphql:validate-schema
+./vendor/bin/console graphql:validate-schema
 
 # Atomic switch to new release
 echo "Switching to new release..."

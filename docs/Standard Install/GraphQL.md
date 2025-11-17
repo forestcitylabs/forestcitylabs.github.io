@@ -45,7 +45,7 @@ input UserInput {
 Then generate PHP classes from your schema:
 
 ```bash
-./vendor/bin/fcl graphql:generate-from-schema schema.graphql src/GraphQL
+./vendor/bin/console graphql:generate-from-schema schema.graphql src/GraphQL
 ```
 
 This creates type classes with attributes that you can customize:
@@ -353,7 +353,7 @@ public function createdAt(): \DateTimeInterface
 Export your schema to a `.graphql` file:
 
 ```bash
-./vendor/bin/fcl graphql:dump-schema > schema.graphql
+./vendor/bin/console graphql:dump-schema > schema.graphql
 ```
 
 ### Schema Validation
@@ -361,7 +361,7 @@ Export your schema to a `.graphql` file:
 Validate your schema for errors:
 
 ```bash
-./vendor/bin/fcl graphql:validate-schema
+./vendor/bin/console graphql:validate-schema
 ```
 
 ### Schema Comparison
@@ -369,7 +369,7 @@ Validate your schema for errors:
 Compare schemas for breaking changes:
 
 ```bash
-./vendor/bin/fcl graphql:schema-diff schema-old.graphql schema-new.graphql
+./vendor/bin/console graphql:schema-diff schema-old.graphql schema-new.graphql
 ```
 
 ## GraphQL Middleware Setup

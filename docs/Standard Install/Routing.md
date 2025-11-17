@@ -408,7 +408,7 @@ public function getUser(int $id): ResponseInterface
 In production, route metadata is automatically cached for performance. To clear the route cache:
 
 ```bash
-./vendor/bin/fcl cache:clear
+./vendor/bin/console cache:clear
 ```
 
 ## Security

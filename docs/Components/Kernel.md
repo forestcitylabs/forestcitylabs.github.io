@@ -249,7 +249,7 @@ class KernelFactory
 }
 
 // Usage
-$kernel = KernelFactory::create($_ENV['APP_ENV'] ?? 'production');
+$kernel = KernelFactory::create($_ENV['ENVIRONMENT'] ?? 'production');
 ```
 
 ### Middleware Prioritization

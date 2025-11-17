@@ -103,20 +103,14 @@ Manages HTTP sessions:
 
 ```php
 use ForestCityLabs\Framework\Middleware\SessionMiddleware;
-use ForestCityLabs\Framework\Session\Driver\FilesystemSessionDriver;
 
-$session_driver = new FilesystemSessionDriver('/tmp/sessions');
+// Configure PHP session settings
+ini_set('session.cookie_lifetime', 3600);
+ini_set('session.cookie_secure', true);
+ini_set('session.cookie_httponly', true);
+ini_set('session.cookie_samesite', 'Lax');
 
-$session_middleware = new SessionMiddleware(
-    $session_driver,
-    [
-        'name' => 'PHPSESSID',
-        'lifetime' => 3600, // 1 hour
-        'path' => '/',
-        'domain' => '',
-        'secure' => true,    // HTTPS only
-        'httponly' => true,  // No JavaScript access
-        'samesite' => 'Lax'  // CSRF protection
+$session_middleware = new SessionMiddleware();
     ]
 );
 ```

@@ -258,24 +258,18 @@ $kernel->addMiddleware($session_middleware);
 
 ## Session Management
 
-The framework provides secure session management with multiple storage drivers.
+The framework provides secure session management using PHP's built-in session functionality.
 
 ### Session Configuration
 
 ```php
-use ForestCityLabs\Framework\Session\Session;
-use ForestCityLabs\Framework\Session\Driver\FilesystemSessionDriver;
-
-$session_driver = new FilesystemSessionDriver('/path/to/sessions');
-
-$session = new Session($session_driver);
+// Configure secure session settings
+ini_set('session.cookie_lifetime', 3600);
+ini_set('session.cookie_secure', true);     // HTTPS only
+ini_set('session.cookie_httponly', true);  // No JavaScript access
+ini_set('session.cookie_samesite', 'Strict'); // CSRF protection
+ini_set('session.use_strict_mode', true);  // Prevent session fixation
 ```
-
-### Available Session Drivers
-
-- **FilesystemSessionDriver** - File-based storage
-- **DbalSessionDriver** - Database storage via Doctrine DBAL
-- **PredisSessionDriver** - Redis storage via Predis
 
 ### Using Sessions
 
