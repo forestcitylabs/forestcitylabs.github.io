@@ -42,6 +42,20 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
+          // Versioning configuration
+          lastVersion: 'v1.3',
+          versions: {
+            current: {
+              label: 'v2.0 (upcoming)',
+              path: 'v2.0',
+              banner: 'unreleased',
+            },
+            'v1.3': {
+              label: 'v1.3',
+              path: 'v1.3',
+              banner: 'none'
+            }
+          },
         },
         blog: {
           showReadingTime: true,
@@ -77,6 +91,11 @@ const config = {
             sidebarId: 'tutorialSidebar',
             position: 'left',
             label: 'Documentation',
+          },
+          {
+            type: 'docsVersionDropdown',
+            position: 'right',
+            dropdownActiveClassDisabled: true,
           },
           {
             href: 'https://github.com/forestcitylabs/documentation',
