@@ -1,100 +1,46 @@
 Sessions
 ========
 
-The Forest City Labs Framework uses a custom sessions implementation that is both object-oriented and fits in the middleware paradigm.
+The Forest City Labs Framework uses standard PHP sessions for session management, providing a simple and reliable session handling approach.
 
 Requirements
 ------------
 
-The session component requires the [`dflydev/fig-cookies`](https://packagist.org/packages/dflydev/fig-cookies) library to function.
-
-The session drivers must have a back-end, the available drivers are:
-
-* Filesystem: [league/flysystem](https://packagist.org/packages/league/flysystem):^3.0
-* DBAL: [doctrine/dbal](https://packagist.org/packages/doctrine/dbal):^3.0
-* Predis: [predis/predis](https://packagist.org/packages/predis/predis):^2.0
+The session component uses PHP's built-in session functionality and requires the [`dflydev/fig-cookies`](https://packagist.org/packages/dflydev/fig-cookies) library for PSR-7 compatible cookie handling.
 
 Configuration
 -------------
 
-### Available Drivers
+Sessions are configured using PHP's standard session configuration. You can set session parameters through `php.ini` or programmatically:
 
-#### Filesystem
-
-To configure the filesystem driver simply create a flysystem using any adapter and pass it to the session driver as follows.
-
-```php title="Filesystem Session Driver"
+```php
 <?php
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
-use ForestCityLabs\Framework\Session\Driver\FilesystemSessionDriver;
-
-$driver = new FilesystemSessionDriver(
-    new Filesystem(
-        new LocalFilesystemAdapter(__DIR__ . '/var/session')
-    )
-);
-```
-
-#### DBAL 
-
-To use the DBAL adapter you also need to create the session table within the corresponding database. The `session:create-table` command can be used for this purpose.
-
-```php title="DBAL Session Driver"
-<?php
-
-use Doctrine\DBAL\DriverManager;
-use ForestCityLabs\Framework\Session\Driver\DbalSessionDriver;
-
-$driver = new DbalSessionDriver(
-    DriverManager::getConnection([
-        'dbname' => 'mydb',
-        'user' => 'user',
-        'password' => 'secret',
-        'host' => 'localhost',
-        'driver' => 'pdo_mysql',
-    ])
-);
-```
-
-:::note
-
-You can set the table name using the second parameter in the constructor, the default is `session`.
-
-:::
-
-#### Predis
-
-The predis adapter only requires a predis client to function, you can create one as follows.
-
-```php title="Predis Session Driver"
-<?php
-
-use ForestCityLabs\Framework\Session\Driver\PredisSessionDriver;
-use Predis\Client;
-
-$driver = new PredisSessionDriver(
-    new Client()
-);
+// Configure session settings
+ini_set('session.cookie_lifetime', 3600);
+ini_set('session.cookie_path', '/');
+ini_set('session.cookie_domain', '');
+ini_set('session.cookie_secure', true);
+ini_set('session.cookie_httponly', true);
+ini_set('session.cookie_samesite', 'Strict');
 ```
 
 Usage
 -----
 
-To use a session you need to create a session and fill it with items, the session middleware will handle much of this for you by creating a `_session` attribute on your request and checking if that attribute has items within it. This middleware will automatically manage your cookies using the `dflydev/fig-cookies` library.
+To use sessions, add the session middleware to your kernel. The middleware will automatically handle session management, creating a `_session` attribute on your request object:
 
 ```php
 <?php
 
 use ForestCityLabs\Framework\Middleware\SessionMiddleware;
 
-$middleware = new SessionMiddleware($driver);
+$middleware = new SessionMiddleware();
 $kernel->addMiddleware($middleware);
 $kernel->handle($request);
 ```
 
-The `ForestCityLabs\Framework\Session\Session` class is the API for interacting with the session.
+The `ForestCityLabs\Framework\Session\Session` class provides the API for interacting with the session:
 
 ```php
 <?php
@@ -103,7 +49,7 @@ $session = $request->getAttribute('_session');
 $session->setValue('hello', 'there');
 ```
 
-Once the session reaches the middleware again it will be automatically saved using the configured driver.
+Session data is automatically saved when the response is sent:
 
 ```php
 <?php
@@ -113,4 +59,18 @@ print_r($session->getValue('hello'));
 /**
  * Will output "there".
  */
+```
+
+### Session Security
+
+For production environments, ensure proper session security:
+
+```php
+<?php
+
+// Secure session configuration
+ini_set('session.cookie_secure', true);     // HTTPS only
+ini_set('session.cookie_httponly', true);  // No JavaScript access
+ini_set('session.cookie_samesite', 'Strict'); // CSRF protection
+ini_set('session.use_strict_mode', true);  // Prevent session fixation
 ```
